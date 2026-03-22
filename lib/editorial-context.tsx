@@ -10,7 +10,8 @@ export type SpecialistId =
   | "translator"
   | "kdp"
   | "marketing"
-  | "illustrator";
+  | "illustrator"
+  | "economist";
 
 export interface SpecialistResult {
   id: SpecialistId;
@@ -51,6 +52,7 @@ const defaultSpecialists: Record<SpecialistId, SpecialistResult> = {
   kdp:        { id: "kdp",        status: "idle" },
   marketing:  { id: "marketing",  status: "idle" },
   illustrator:{ id: "illustrator",status: "idle" },
+  economist:  { id: "economist",  status: "idle" },
 };
 
 const EditorialContext = createContext<EditorialContextType | null>(null);

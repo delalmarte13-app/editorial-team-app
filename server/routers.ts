@@ -195,6 +195,47 @@ ESTRUCTURA DE TU RESPUESTA (en Markdown):
 ## Prompt para ilustración de portada
 [Prompt detallado listo para usar en generación de imagen IA]`,
   },
+  economist: {
+    name: "Carlos Mendez",
+    system: `Eres Carlos Mendez, economista especializado en la industria editorial con 19 años de experiencia analizando proyectos de publicación.
+
+REGLAS ABSOLUTAS:
+- Eres realista, no optimista. Los números no mienten.
+- No usas lenguaje de IA. Hablas como un economista profesional.
+- Siempre das tres escenarios: pesimista, realista y optimista.
+- Tus estimaciones se basan en datos de mercado, no en deseos.
+
+ESTRUCTURA DE TU RESPUESTA (en Markdown):
+## Análisis de viabilidad económica
+[Tu evaluación del potencial comercial del texto]
+
+## Escenario Bajo (Pesimista)
+- Precio de venta: [X€]
+- Copias vendidas (año 1): [N]
+- Ingresos brutos: [X€]
+- Costos estimados: [X€]
+- Beneficio neto: [X€]
+- Análisis: [Por qué este escenario]
+
+## Escenario Medio (Realista)
+- Precio de venta: [X€]
+- Copias vendidas (año 1): [N]
+- Ingresos brutos: [X€]
+- Costos estimados: [X€]
+- Beneficio neto: [X€]
+- Análisis: [Por qué este escenario]
+
+## Escenario Alto (Optimista)
+- Precio de venta: [X€]
+- Copias vendidas (año 1): [N]
+- Ingresos brutos: [X€]
+- Costos estimados: [X€]
+- Beneficio neto: [X€]
+- Análisis: [Por qué este escenario]
+
+## Recomendación final
+[Tu veredicto económico: ¿vale la pena publicar este texto?]`,
+  },
 };
 
 export const appRouter = router({
@@ -221,6 +262,7 @@ export const appRouter = router({
             "kdp",
             "marketing",
             "illustrator",
+            "economist",
           ]),
           targetLanguage: z.string().optional(),
         }),
@@ -293,12 +335,22 @@ export const appRouter = router({
         }),
       )
       .mutation(async ({ input }) => {
-        const fullPrompt = input.style
-          ? `${input.prompt}. Style: ${input.style}. High quality, editorial illustration, book cover art.`
-          : `${input.prompt}. High quality, editorial illustration, book cover art.`;
+        try {
+          const fullPrompt = input.style
+            ? `${input.prompt}. Style: ${input.style}. High quality, editorial illustration, book cover art.`
+            : `${input.prompt}. High quality, editorial illustration, book cover art.`;
 
-        const { url } = await generateImage({ prompt: fullPrompt });
-        return { imageUrl: url };
+          console.log("Generating illustration with prompt:", fullPrompt.slice(0, 100));
+          const { url } = await generateImage({ prompt: fullPrompt });
+          if (!url) {
+            throw new Error("No image URL returned from generation service");
+          }
+          console.log("Illustration generated successfully:", url);
+          return { imageUrl: url };
+        } catch (error: any) {
+          console.error("Illustration generation error:", error);
+          throw new Error(`Failed to generate illustration: ${error?.message || "Unknown error"}`);
+        }
       }),
   }),
 });

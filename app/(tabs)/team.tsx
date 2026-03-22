@@ -88,6 +88,15 @@ const SPECIALISTS: Array<{
     description: "Estilo visual, ilustración y diseño de portada. Artista premiada.",
     color: "#7C2E2E",
   },
+  {
+    id: "economist",
+    name: "Carlos Mendez",
+    fullName: "Carlos Mendez",
+    role: "Economista Editorial",
+    emoji: "💰",
+    description: "Análisis de ventas, beneficios y viabilidad económica en 3 escenarios.",
+    color: "#5A7C2E",
+  },
 ];
 
 export default function TeamScreen() {

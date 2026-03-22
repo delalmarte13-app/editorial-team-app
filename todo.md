@@ -83,3 +83,10 @@
 - [x] Pruebas unitarias básicas
 - [x] Eliminar console.log de debug
 - [x] Agregar tokens accent/tint al theme-provider
+
+## Mejoras Solicitadas (Nueva Iteración)
+- [x] Corregir generación de ilustraciones (debug del endpoint)
+- [x] Añadir especialista económico (Carlos Mendez - Economista)
+- [x] Implementar análisis de ventas en 3 escenarios (bajo, medio, alto)
+- [x] Crear pantalla de chat con el equipo editorial
+- [x] Integrar chat con contexto del texto actual

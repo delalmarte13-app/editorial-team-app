@@ -94,6 +94,14 @@ const SPECIALISTS_CONFIG: Record<
     bio: "Artista ghanesa-británica premiada en tres continentes. Ha diseñado portadas para editoriales independientes y grandes sellos. Su criterio visual es tan honesto como su trabajo.",
     showIllustrationGenerator: true,
   },
+  economist: {
+    name: "Carlos Mendez",
+    role: "Economista Editorial",
+    emoji: "💰",
+    color: "#5A7C2E",
+    years: "19 años de experiencia",
+    bio: "Economista especializado en industria editorial. Ha analizado miles de proyectos. Proporciona estimaciones realistas de ventas, costos y beneficios. No promete milagros, solo números.",
+  },
 };
 
 const LANGUAGES = [

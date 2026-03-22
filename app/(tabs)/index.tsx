@@ -190,6 +190,7 @@ const TEAM_MEMBERS = [
   { id: "kdp",         emoji: "📚", shortName: "Rachel",  role: "KDP" },
   { id: "marketing",   emoji: "📊", shortName: "Diego",   role: "Marketing" },
   { id: "illustrator", emoji: "🎨", shortName: "Amara",   role: "Arte" },
+  { id: "economist",   emoji: "💰", shortName: "Carlos",  role: "Economista" },
 ];
 
 const styles = StyleSheet.create({
