@@ -16,7 +16,7 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 import { SpecialistCard } from "@/components/specialist-card";
 import { trpc } from "@/lib/trpc";
 
-const SPECIALISTS: Array<{
+const SPECIALISTS: {
   id: SpecialistId;
   name: string;
   fullName: string;
@@ -24,7 +24,7 @@ const SPECIALISTS: Array<{
   emoji: string;
   description: string;
   color: string;
-}> = [
+}[] = [
   {
     id: "corrector",
     name: "Elena Voss",

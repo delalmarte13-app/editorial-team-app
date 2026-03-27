@@ -7,7 +7,6 @@ import {
   StyleSheet,
   Platform,
   KeyboardAvoidingView,
-  FlatList,
   ActivityIndicator,
 } from "react-native";
 import { useState, useRef, useEffect } from "react";
