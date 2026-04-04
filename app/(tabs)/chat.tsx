@@ -79,11 +79,12 @@ export default function ChatScreen() {
         specialistId: selectedSpecialist as any,
       });
 
+      const resultText = typeof response.result === 'string' ? response.result : JSON.stringify(response.result);
       const specialistMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         role: "specialist",
         specialist: selectedSpecialist,
-        content: response.result,
+        content: resultText,
         timestamp: Date.now(),
       };
 

@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
+  Alert,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useState, useRef } from "react";
@@ -17,6 +18,8 @@ import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { useEditorial } from "@/lib/editorial-context";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import * as DocumentPicker from "expo-document-picker";
+import * as FileSystem from "expo-file-system/legacy";
 
 const MIN_WORDS = 20;
 
@@ -46,6 +49,31 @@ export default function HomeScreen() {
     setCurrentText("");
     if (Platform.OS !== "web") {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
+  };
+
+  const handlePickFile = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ["text/plain", "application/pdf"],
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        const file = result.assets[0];
+        try {
+          const content = await FileSystem.readAsStringAsync(file.uri, {
+            encoding: FileSystem.EncodingType.UTF8,
+          });
+          setCurrentText(content);
+          Alert.alert("Éxito", "Archivo cargado correctamente");
+        } catch {
+          Alert.alert("Error", "No se pudo leer el contenido del archivo");
+        }
+      }
+    } catch (error: any) {
+      if (error.code !== "DOCUMENT_PICKER_CANCELLED") {
+        Alert.alert("Error", "No se pudo cargar el archivo");
+      }
     }
   };
 
@@ -119,6 +147,12 @@ export default function HomeScreen() {
                 <Text style={[styles.statNumber, { color: colors.muted }]}>{charCount}</Text>
                 <Text style={[styles.statLabel, { color: colors.muted }]}>caracteres</Text>
               </View>
+              <Pressable
+                onPress={handlePickFile}
+                style={({ pressed }) => [styles.actionBtn, pressed && { opacity: 0.6 }]}
+              >
+                <IconSymbol name="paperclip" size={18} color={colors.muted} />
+              </Pressable>
               {currentText.length > 0 && (
                 <Pressable
                   onPress={handleClear}
@@ -191,6 +225,8 @@ const TEAM_MEMBERS = [
   { id: "marketing",   emoji: "📊", shortName: "Diego",   role: "Marketing" },
   { id: "illustrator", emoji: "🎨", shortName: "Amara",   role: "Arte" },
   { id: "economist",   emoji: "💰", shortName: "Carlos",  role: "Economista" },
+  { id: "rewriter",    emoji: "🔄", shortName: "Reescr.", role: "Reescritura" },
+  { id: "antiAi",      emoji: "🛡️", shortName: "Anti-IA", role: "Autenticidad" },
 ];
 
 const styles = StyleSheet.create({
@@ -267,6 +303,9 @@ const styles = StyleSheet.create({
     width: 1,
     height: 14,
     backgroundColor: "#E0DDD8",
+  },
+  actionBtn: {
+    padding: 4,
   },
   clearBtn: {
     marginLeft: "auto",

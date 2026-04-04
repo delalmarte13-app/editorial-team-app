@@ -97,3 +97,29 @@
 - [x] Linting corregido
 - [x] Servidor de desarrollo funcionando
 - [x] Guía completa de Goodbarber creada (GOODBARBER_DESIGN_GUIDE.md)
+
+## Mejoras Fase 2 (Gemini API + Nuevos Departamentos)
+
+### Configuración Gemini
+- [ ] Configurar clave API de Google Gemini
+- [ ] Reemplazar mocks con análisis reales de Gemini
+- [ ] Validar conexión y manejo de errores
+
+### Nuevos Departamentos
+- [ ] Departamento de Reescritura (texto mejorado + audio)
+- [ ] Departamento Anti-IA (verificación de autenticidad)
+- [ ] Equipo de Ingeniería de Prompts (gestión centralizada)
+
+### Funcionalidades Avanzadas
+- [ ] Edición por párrafo (seleccionar + menú rápido)
+- [ ] Chat interactivo mejorado con contexto
+- [ ] Dictado de voz (speech-to-text)
+- [ ] Lectura de voz (text-to-speech)
+- [ ] Almacenamiento offline de audio
+- [ ] Ilustración con alternativa gratuita
+
+### Testing y Validación
+- [ ] Tests para Gemini API
+- [ ] Tests para funcionalidades de audio
+- [ ] Tests para almacenamiento offline
+- [ ] Validación end-to-end

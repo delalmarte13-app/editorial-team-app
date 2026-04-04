@@ -102,6 +102,22 @@ const SPECIALISTS_CONFIG: Record<
     years: "19 años de experiencia",
     bio: "Economista especializado en industria editorial. Ha analizado miles de proyectos. Proporciona estimaciones realistas de ventas, costos y beneficios. No promete milagros, solo números.",
   },
+  rewriter: {
+    name: "Departamento de Reescritura",
+    role: "Reescritura Profesional",
+    emoji: "🔄",
+    color: "#2E5A7C",
+    years: "Equipo especializado",
+    bio: "Equipo de reescritores profesionales que transforman textos buenos en textos excepcionales, manteniendo la voz del autor pero mejorando prosa, pacing y engagement.",
+  },
+  antiAi: {
+    name: "Vigilancia Anti-IA",
+    role: "Verificación de Autenticidad",
+    emoji: "🛡️",
+    color: "#7C2E5A",
+    years: "Especialistas en detección",
+    bio: "Equipo especializado en detectar patrones de escritura artificial y verificar que el texto mantiene autenticidad y voz humana genuina.",
+  },
 };
 
 const LANGUAGES = [
@@ -151,9 +167,10 @@ export default function SpecialistScreen() {
         specialistId,
         targetLanguage: specialistId === "translator" ? selectedLanguage : undefined,
       });
+      const resultText = typeof result.result === 'string' ? result.result : JSON.stringify(result.result);
       setSpecialistResult(specialistId, {
         status: "ready",
-        result: result.result,
+        result: resultText,
         generatedAt: Date.now(),
       });
       if (Platform.OS !== "web") {
