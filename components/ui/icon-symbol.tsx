@@ -60,6 +60,7 @@ const MAPPING = {
   "megaphone.fill": "campaign",
   "briefcase.fill": "work",
   "translate": "translate",
+  "gearshape.fill": "settings",
 } as IconMapping;
 
 /**

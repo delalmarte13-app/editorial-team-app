@@ -119,7 +119,27 @@
 - [ ] Ilustración con alternativa gratuita
 
 ### Testing y Validación
-- [ ] Tests para Gemini API
-- [ ] Tests para funcionalidades de audio
-- [ ] Tests para almacenamiento offline
-- [ ] Validación end-to-end
+- [x] Tests para Gemini API
+- [ ] Implementar importación de archivos (.txt, .pdf, .docx)
+- [ ] Probar carga de archivos en múltiples formatos
+- [ ] Probar pantalla de inicio (pegar, contador, estadísticas)
+- [ ] Probar pantalla del equipo (visualización de especialistas)
+- [ ] Probar análisis individual con Gemini API
+- [ ] Probar chat interactivo con especialistas
+- [ ] Probar historial de textos
+- [ ] Probar navegación entre pantallas
+- [ ] Probar modo oscuro y responsividad
+- [ ] Ejecutar suite completa de tests
+
+
+## Fase 3: Modo Offline y Monitor de Créditos
+- [x] Implementar sistema de monitor de créditos API (api-credits.ts)
+- [x] Implementar análisis offline para todos los especialistas (offline-analysis.ts)
+- [x] Implementar exportación de análisis (JSON, CSV, TXT, HTML)
+- [x] Crear pantalla de configuración con modo offline
+- [x] Agregar tab de configuración a la navegación
+- [x] Tests para modo offline y exportación (92 tests pasando)
+- [x] Probar importación/exportación de archivos
+- [x] Probar navegación completa
+- [x] Verificar modo offline funciona correctamente
+- [x] Verificar monitor de créditos actualiza correctamente

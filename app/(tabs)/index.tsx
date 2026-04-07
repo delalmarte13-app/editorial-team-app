@@ -18,8 +18,7 @@ import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { useEditorial } from "@/lib/editorial-context";
 import { IconSymbol } from "@/components/ui/icon-symbol";
-import * as DocumentPicker from "expo-document-picker";
-import * as FileSystem from "expo-file-system/legacy";
+import { pickAndReadFile, formatFileSize } from "@/lib/file-handler";
 
 const MIN_WORDS = 20;
 
@@ -53,27 +52,15 @@ export default function HomeScreen() {
   };
 
   const handlePickFile = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: ["text/plain", "application/pdf"],
-      });
-
-      if (!result.canceled && result.assets[0]) {
-        const file = result.assets[0];
-        try {
-          const content = await FileSystem.readAsStringAsync(file.uri, {
-            encoding: FileSystem.EncodingType.UTF8,
-          });
-          setCurrentText(content);
-          Alert.alert("Éxito", "Archivo cargado correctamente");
-        } catch {
-          Alert.alert("Error", "No se pudo leer el contenido del archivo");
-        }
-      }
-    } catch (error: any) {
-      if (error.code !== "DOCUMENT_PICKER_CANCELLED") {
-        Alert.alert("Error", "No se pudo cargar el archivo");
-      }
+    const result = await pickAndReadFile();
+    if (result.success && result.content) {
+      setCurrentText(result.content);
+      Alert.alert(
+        "Éxito",
+        `Archivo "${result.fileName}" cargado (${formatFileSize(result.fileSize)})`
+      );
+    } else if (result.error) {
+      Alert.alert("Error", result.error);
     }
   };
 
