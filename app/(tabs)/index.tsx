@@ -10,6 +10,7 @@ import {
   Keyboard,
   Alert,
 } from "react-native";
+import * as Clipboard from "expo-clipboard";
 import { useRouter } from "expo-router";
 import { useState, useRef } from "react";
 import * as Haptics from "expo-haptics";
@@ -61,6 +62,22 @@ export default function HomeScreen() {
       );
     } else if (result.error) {
       Alert.alert("Error", result.error);
+    }
+  };
+
+  const handlePaste = async () => {
+    try {
+      const text = await (Clipboard as any).getStringAsync?.() || "";
+      if (text && text.trim()) {
+        setCurrentText(text);
+        if (Platform.OS !== "web") {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        }
+      } else {
+        Alert.alert("Portapapeles vacío", "No hay texto en el portapapeles.");
+      }
+    } catch (error) {
+      Alert.alert("Error", "No se pudo acceder al portapapeles.");
     }
   };
 
@@ -139,6 +156,12 @@ export default function HomeScreen() {
                 style={({ pressed }) => [styles.actionBtn, pressed && { opacity: 0.6 }]}
               >
                 <IconSymbol name="paperclip" size={18} color={colors.muted} />
+              </Pressable>
+              <Pressable
+                onPress={handlePaste}
+                style={({ pressed }) => [styles.actionBtn, pressed && { opacity: 0.6 }]}
+              >
+                <IconSymbol name="doc.on.clipboard" size={18} color={colors.muted} />
               </Pressable>
               {currentText.length > 0 && (
                 <Pressable

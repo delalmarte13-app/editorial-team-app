@@ -2,6 +2,7 @@ import { ScrollView, Text, View, Pressable, Alert, Platform, ActivityIndicator }
 import { useState, useEffect } from "react";
 import * as Haptics from "expo-haptics";
 import * as Sharing from "expo-sharing";
+import * as Clipboard from "expo-clipboard";
 import { router } from "expo-router";
 
 import { ScreenContainer } from "@/components/screen-container";
@@ -17,7 +18,22 @@ export default function RewriteCompleteScreen() {
   const [rewriteResult, setRewriteResult] = useState<RewriteResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
   const analyzeText = trpc.editorial.analyze.useMutation();
+
+  const handleCopyToClipboard = async () => {
+    if (!rewriteResult?.rewrittenText) return;
+    try {
+      await (Clipboard as any).setStringAsync?.(rewriteResult.rewrittenText);
+      setCopied(true);
+      if (Platform.OS !== "web") {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      }
+      setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      Alert.alert("Error", "No se pudo copiar al portapapeles");
+    }
+  };
 
   useEffect(() => {
     if (text && !rewriteResult) {
@@ -174,6 +190,16 @@ ${rewriteResult.summary}`;
           </View>
 
           <View className="gap-3">
+            <Pressable
+              onPress={handleCopyToClipboard}
+              style={({ pressed }) => [
+                { backgroundColor: colors.accent, opacity: pressed ? 0.8 : 1 },
+              ]}
+              className="rounded-xl p-4 items-center"
+            >
+              <Text className="text-background font-semibold">{copied ? "✓ Copiado" : "📋 Copiar Texto"}</Text>
+            </Pressable>
+
             <Pressable
               onPress={handleExport}
               style={({ pressed }) => [
