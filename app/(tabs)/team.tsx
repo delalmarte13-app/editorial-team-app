@@ -15,6 +15,8 @@ import { useEditorial, type SpecialistId } from "@/lib/editorial-context";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { SpecialistCard } from "@/components/specialist-card";
 import { trpc } from "@/lib/trpc";
+import { exportAsDocx, type ExportData } from "@/lib/export-analysis";
+import { Alert } from "react-native";
 
 const SPECIALISTS: {
   id: SpecialistId;
@@ -149,6 +151,49 @@ export default function TeamScreen() {
   const readyCount = Object.values(specialists).filter((s) => s.status === "ready").length;
   const analyzingCount = Object.values(specialists).filter((s) => s.status === "analyzing").length;
 
+  const handleExportDocx = async () => {
+    if (readyCount === 0) {
+      Alert.alert("Sin análisis", "Completa al menos un análisis antes de exportar.");
+      return;
+    }
+
+    if (Platform.OS !== "web") {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
+
+    const analyses: { [key: string]: string } = {};
+    Object.entries(specialists).forEach(([id, specialist]) => {
+      if (specialist.result) {
+        analyses[id] = specialist.result;
+      }
+    });
+
+    const wordCount = currentText.trim().split(/\s+/).filter(Boolean).length;
+    const charCount = currentText.length;
+
+    const exportData: ExportData = {
+      text: currentText,
+      analyses,
+      timestamp: Date.now(),
+      metadata: {
+        wordCount,
+        charCount,
+        exportedAt: new Date().toLocaleString("es-ES"),
+      },
+    };
+
+    try {
+      const success = await exportAsDocx(exportData);
+      if (success) {
+        Alert.alert("Éxito", "Documento exportado correctamente.");
+      } else {
+        Alert.alert("Error", "No se pudo exportar el documento.");
+      }
+    } catch (error) {
+      Alert.alert("Error", "Ocurrió un error al exportar.");
+    }
+  };
+
   return (
     <ScreenContainer containerClassName="bg-background">
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -210,6 +255,30 @@ export default function TeamScreen() {
                 {analyzingCount > 0 ? "Analizando..." : "Analizar con todo el equipo"}
               </Text>
             </Pressable>
+          </View>
+        )}
+
+        {/* Export Button */}
+        {readyCount > 0 && (
+          <View style={styles.exportSection}>
+            <Pressable
+              onPress={handleExportDocx}
+              style={({ pressed }) => [
+                styles.exportBtn,
+                {
+                  backgroundColor: colors.primary,
+                  transform: [{ scale: pressed ? 0.97 : 1 }],
+                },
+              ]}
+            >
+              <IconSymbol name="doc.fill" size={18} color={colors.accent} />
+              <Text style={[styles.exportBtnText, { color: colors.accent }]}>
+                Exportar como Word
+              </Text>
+            </Pressable>
+            <Text style={[styles.exportHint, { color: colors.muted }]}>
+              Descarga un documento editable con todos los análisis
+            </Text>
           </View>
         )}
 
@@ -291,5 +360,28 @@ const styles = StyleSheet.create({
   grid: {
     paddingHorizontal: 16,
     gap: 10,
+  },
+  exportSection: {
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    gap: 8,
+  },
+  exportBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    paddingVertical: 14,
+    borderRadius: 14,
+  },
+  exportBtnText: {
+    fontSize: 15,
+    fontWeight: "700",
+    letterSpacing: 0.2,
+  },
+  exportHint: {
+    fontSize: 12,
+    textAlign: "center",
+    lineHeight: 16,
   },
 });

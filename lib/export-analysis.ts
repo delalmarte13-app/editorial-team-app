@@ -1,5 +1,6 @@
 import * as FileSystem from "expo-file-system/legacy";
 import * as Sharing from "expo-sharing";
+import { Document, Packer, Paragraph, HeadingLevel, AlignmentType } from "docx";
 
 export interface ExportData {
   text: string;
@@ -252,4 +253,123 @@ function getSpecialistName(id: string): string {
     antiAi: "🛡️ Anti-IA",
   };
   return names[id] || id;
+}
+
+export async function exportAsDocx(data: ExportData): Promise<boolean> {
+  try {
+    const fileName = `editorial-analysis-${Date.now()}.docx`;
+    const filePath = `${FileSystem.documentDirectory}${fileName}`;
+
+    const date = new Date(data.timestamp);
+    const dateStr = date.toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    const sections = [
+      new Paragraph({
+        text: "ANÁLISIS EDITORIAL COMPLETO",
+        heading: HeadingLevel.HEADING_1,
+        alignment: AlignmentType.CENTER,
+        spacing: { after: 200 },
+      }),
+      new Paragraph({
+        text: "Tu Equipo Editorial Virtual",
+        alignment: AlignmentType.CENTER,
+        spacing: { after: 400 },
+      }),
+      new Paragraph({
+        text: dateStr,
+        alignment: AlignmentType.CENTER,
+        spacing: { after: 800 },
+      }),
+      new Paragraph({
+        text: "TEXTO ORIGINAL",
+        heading: HeadingLevel.HEADING_2,
+        spacing: { before: 200, after: 200 },
+      }),
+      new Paragraph({
+        text: data.text,
+        spacing: { after: 400 },
+        alignment: AlignmentType.JUSTIFIED,
+      }),
+      new Paragraph({
+        text: "ANÁLISIS DETALLADO POR DEPARTAMENTO",
+        heading: HeadingLevel.HEADING_2,
+        spacing: { before: 400, after: 300 },
+      }),
+    ];
+
+    for (const [specialist, analysis] of Object.entries(data.analyses)) {
+      if (analysis && typeof analysis === "string" && analysis.trim()) {
+        const specialistName = getSpecialistName(specialist);
+        sections.push(
+          new Paragraph({
+            text: specialistName,
+            heading: HeadingLevel.HEADING_3,
+            spacing: { before: 200, after: 100 },
+          }),
+          new Paragraph({
+            text: analysis,
+            spacing: { after: 300 },
+            alignment: AlignmentType.JUSTIFIED,
+          })
+        );
+      }
+    }
+
+    sections.push(
+      new Paragraph({
+        text: "Documento generado por Editorial Team - Tu equipo editorial de élite",
+        spacing: { before: 600 },
+        alignment: AlignmentType.CENTER,
+        run: {
+          italics: true,
+        },
+      })
+    );
+
+    const doc = new Document({
+      sections: [
+        {
+          properties: {},
+          children: sections,
+        },
+      ],
+    });
+
+    const blob = await Packer.toBlob(doc);
+    const base64 = await blobToBase64(blob);
+
+    await FileSystem.writeAsStringAsync(filePath, base64, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    if (await Sharing.isAvailableAsync()) {
+      await Sharing.shareAsync(filePath, {
+        mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        dialogTitle: "Compartir análisis editorial",
+      });
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error exporting DOCX:", error);
+    return false;
+  }
+}
+
+function blobToBase64(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const result = reader.result as string;
+      resolve(result.split(",")[1] || result);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
 }
