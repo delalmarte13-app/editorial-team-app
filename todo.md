@@ -152,3 +152,15 @@
 - [x] Ejecutar tests completos (92 tests pasando)
 - [x] TypeScript sin errores
 - [x] Servidor funcionando correctamente
+
+## Fase 5: Historial de Reescrituras Recientes
+- [x] Crear funciones getRecentRewrites y deleteRewrite en lib/rewrite.ts
+- [x] Agregar estado recentRewrites en home screen
+- [x] Implementar funciones handleLoadRewrite y handleDeleteRewrite
+- [x] Crear sección visual de reescrituras recientes en home screen
+- [x] Agregar scroll horizontal para tarjetas de reescrituras
+- [x] Implementar eliminación de reescrituras con confirmación
+- [x] Agregar estilos para tarjetas de reescrituras (rewriteCard, rewritePreview, etc.)
+- [x] Crear tests para funcionalidad de historial (10 tests)
+- [x] Todos los tests pasando (112 tests)
+- [x] TypeScript sin errores

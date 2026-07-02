@@ -42,3 +42,33 @@ export async function saveRewriteResult(result: RewriteResult): Promise<void> {
     console.error("Error saving rewrite result:", error);
   }
 }
+
+export async function getRecentRewrites(limit: number = 5): Promise<RewriteResult[]> {
+  try {
+    const keys = await AsyncStorage.getAllKeys();
+    const rewriteKeys = keys.filter((k) => k.startsWith("rewrite_")).sort().reverse();
+    const results: RewriteResult[] = [];
+
+    for (const key of rewriteKeys.slice(0, limit)) {
+      const data = await AsyncStorage.getItem(key);
+      if (data) {
+        try {
+          results.push(JSON.parse(data));
+        } catch {}
+      }
+    }
+    return results;
+  } catch (error) {
+    console.error("Error loading recent rewrites:", error);
+    return [];
+  }
+}
+
+export async function deleteRewrite(timestamp: number): Promise<void> {
+  try {
+    const key = `rewrite_${timestamp}`;
+    await AsyncStorage.removeItem(key);
+  } catch (error) {
+    console.error("Error deleting rewrite:", error);
+  }
+}

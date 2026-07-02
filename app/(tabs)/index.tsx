@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import * as Clipboard from "expo-clipboard";
 import { useRouter } from "expo-router";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import * as Haptics from "expo-haptics";
 
 import { ScreenContainer } from "@/components/screen-container";
@@ -20,6 +20,7 @@ import { useColors } from "@/hooks/use-colors";
 import { useEditorial } from "@/lib/editorial-context";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { pickAndReadFile, formatFileSize } from "@/lib/file-handler";
+import { getRecentRewrites, deleteRewrite, type RewriteResult } from "@/lib/rewrite";
 
 const MIN_WORDS = 20;
 
@@ -28,6 +29,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const { currentText, setCurrentText, addToHistory, resetSpecialists } = useEditorial();
   const [isFocused, setIsFocused] = useState(false);
+  const [recentRewrites, setRecentRewrites] = useState<RewriteResult[]>([]);
   const inputRef = useRef<TextInput>(null);
 
   const wordCount = currentText.trim().split(/\s+/).filter(Boolean).length;
@@ -80,6 +82,40 @@ export default function HomeScreen() {
       Alert.alert("Error", "No se pudo acceder al portapapeles.");
     }
   };
+
+  const loadRecentRewrites = async () => {
+    const rewrites = await getRecentRewrites(5);
+    setRecentRewrites(rewrites);
+  };
+
+  const handleLoadRewrite = (rewrite: RewriteResult) => {
+    setCurrentText(rewrite.rewrittenText);
+    if (Platform.OS !== "web") {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
+  };
+
+  const handleDeleteRewrite = (timestamp: number) => {
+    Alert.alert(
+      "Eliminar reescritura",
+      "¿Quieres eliminar esta reescritura del historial?",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Eliminar",
+          style: "destructive",
+          onPress: async () => {
+            await deleteRewrite(timestamp);
+            loadRecentRewrites();
+          },
+        },
+      ]
+    );
+  };
+
+  useEffect(() => {
+    loadRecentRewrites();
+  }, []);
 
   return (
     <ScreenContainer containerClassName="bg-background">
@@ -196,6 +232,43 @@ export default function HomeScreen() {
               ))}
             </ScrollView>
           </View>
+
+          {/* Recent Rewrites */}
+          {recentRewrites.length > 0 && (
+            <View style={styles.rewritesSection}>
+              <Text style={[styles.sectionLabel, { color: colors.muted }]}>REESCRITURAS RECIENTES</Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.rewritesScroll}>
+                {recentRewrites.map((rewrite) => {
+                  const preview = rewrite.rewrittenText.slice(0, 80).replace(/\n/g, " ");
+                  const date = new Date(rewrite.timestamp);
+                  const dateStr = date.toLocaleDateString("es-ES", { month: "short", day: "numeric" });
+                  return (
+                    <Pressable
+                      key={rewrite.timestamp}
+                      onPress={() => handleLoadRewrite(rewrite)}
+                      style={({ pressed }) => [
+                        styles.rewriteCard,
+                        { backgroundColor: colors.surface, borderColor: colors.border, opacity: pressed ? 0.75 : 1 },
+                      ]}
+                    >
+                      <Text style={[styles.rewritePreview, { color: colors.foreground }]} numberOfLines={2}>
+                        {preview}...
+                      </Text>
+                      <View style={styles.rewriteFooter}>
+                        <Text style={[styles.rewriteDate, { color: colors.muted }]}>{dateStr}</Text>
+                        <Pressable
+                          onPress={() => handleDeleteRewrite(rewrite.timestamp)}
+                          style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
+                        >
+                          <IconSymbol name="xmark" size={14} color={colors.error} />
+                        </Pressable>
+                      </View>
+                    </Pressable>
+                  );
+                })}
+              </ScrollView>
+            </View>
+          )}
 
           {/* Submit Button */}
           <View style={styles.submitSection}>
@@ -375,5 +448,37 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: "center",
     lineHeight: 18,
+  },
+  rewritesSection: {
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+  },
+  rewritesScroll: {
+    marginHorizontal: -24,
+    paddingHorizontal: 24,
+  },
+  rewriteCard: {
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 12,
+    marginRight: 12,
+    minWidth: 200,
+    maxWidth: 200,
+    gap: 8,
+  },
+  rewritePreview: {
+    fontSize: 13,
+    fontWeight: "500",
+    lineHeight: 18,
+  },
+  rewriteFooter: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 8,
+  },
+  rewriteDate: {
+    fontSize: 11,
+    fontWeight: "400",
   },
 });
