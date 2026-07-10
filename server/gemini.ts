@@ -24,7 +24,8 @@ export type SpecialistId =
   | "illustrator"
   | "economist"
   | "rewriter"
-  | "antiAi";
+  | "antiAi"
+  | "director";
 
 export interface AnalysisRequest {
   text: string;

@@ -179,3 +179,22 @@
 - [x] Documento DOCX contiene: título, fecha, texto original, análisis de todos los departamentos, pie de página
 
 Estado: Exportación completa implementada. Los usuarios pueden descargar un archivo Word editable con todos los análisis de los 10 especialistas.
+
+
+## Fase 8: Regulador de Alucinamiento y 5 Equipos de Reescritura
+- [x] Crear lib/rewrite-teams.ts con 5 equipos especializados por edad
+- [x] Implementar regulador de alucinamiento (0-5 niveles)
+- [x] Agregar procedimiento rewriteWithTeam en server/routers.ts
+- [x] Agregar "director" al enum de especialistas
+- [x] Todos los tests pasando (123 tests)
+- [x] TypeScript sin errores
+
+## Fase 9: Carga de Archivos y Anti-IA Mejorado
+- [x] Crear lib/file-parser.ts para parsear .txt, .pdf, .docx
+- [x] Crear lib/anti-ia-analyzer.ts con scoring de autenticidad
+- [x] Implementar 10 indicadores de autenticidad
+- [x] Agregar sugerencias para mejorar autenticidad
+- [x] Todos los tests pasando (123 tests)
+- [x] TypeScript sin errores
+
+Estado: Carga de archivos y análisis anti-IA mejorado completados.

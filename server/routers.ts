@@ -292,6 +292,7 @@ export const appRouter = router({
             "economist",
             "rewriter",
             "antiAi",
+            "director",
           ]),
           targetLanguage: z.string().optional(),
         }),
@@ -371,6 +372,30 @@ export const appRouter = router({
         } catch (error: any) {
           console.error("Illustration generation error:", error);
           throw new Error(`Failed to generate illustration: ${error?.message || "Unknown error"}`);
+        }
+      }),
+
+    rewriteWithTeam: publicProcedure
+      .input(z.object({
+        text: z.string(),
+        teamId: z.string(),
+        hallucinationLevel: z.number().min(0).max(5),
+      }))
+      .mutation(async ({ input }) => {
+        try {
+          const { REWRITE_TEAMS } = await import("../lib/rewrite-teams.js");
+          const team = REWRITE_TEAMS[input.teamId as keyof typeof REWRITE_TEAMS];
+          if (!team) {
+            throw new Error(`Team ${input.teamId} not found`);
+          }
+          const prompt = team.prompt(input.text, input.hallucinationLevel);
+          const result = await invokeLLM({
+            messages: [{ role: "user", content: prompt }],
+          });
+          return result;
+        } catch (error: any) {
+          console.error("Rewrite error:", error);
+          throw new Error(`Failed to rewrite: ${error?.message || "Unknown error"}`);
         }
       }),
   }),
