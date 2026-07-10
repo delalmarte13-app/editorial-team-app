@@ -5,6 +5,7 @@ import {
   Pressable,
   StyleSheet,
   Platform,
+  Alert,
 } from "react-native";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
@@ -16,7 +17,6 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 import { SpecialistCard } from "@/components/specialist-card";
 import { trpc } from "@/lib/trpc";
 import { exportAsDocx, type ExportData } from "@/lib/export-analysis";
-import { Alert } from "react-native";
 
 const SPECIALISTS: {
   id: SpecialistId;
@@ -190,6 +190,7 @@ export default function TeamScreen() {
         Alert.alert("Error", "No se pudo exportar el documento.");
       }
     } catch (error) {
+      console.error("Error al exportar DOCX:", error);
       Alert.alert("Error", "Ocurrió un error al exportar.");
     }
   };

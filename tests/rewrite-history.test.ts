@@ -4,7 +4,7 @@ import * as fs from "fs";
 describe("Rewrite History Functionality", () => {
   it("should have getRecentRewrites function", () => {
     const rewriteCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/lib/rewrite.ts",
+      process.cwd() + "/lib/rewrite.ts",
       "utf-8"
     );
     expect(rewriteCode).toContain("getRecentRewrites");
@@ -12,7 +12,7 @@ describe("Rewrite History Functionality", () => {
 
   it("should have deleteRewrite function", () => {
     const rewriteCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/lib/rewrite.ts",
+      process.cwd() + "/lib/rewrite.ts",
       "utf-8"
     );
     expect(rewriteCode).toContain("deleteRewrite");
@@ -20,7 +20,7 @@ describe("Rewrite History Functionality", () => {
 
   it("should have recentRewrites state in home screen", () => {
     const homeScreenCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/app/(tabs)/index.tsx",
+      process.cwd() + "/app/(tabs)/index.tsx",
       "utf-8"
     );
     expect(homeScreenCode).toContain("recentRewrites");
@@ -28,7 +28,7 @@ describe("Rewrite History Functionality", () => {
 
   it("should have loadRecentRewrites function in home screen", () => {
     const homeScreenCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/app/(tabs)/index.tsx",
+      process.cwd() + "/app/(tabs)/index.tsx",
       "utf-8"
     );
     expect(homeScreenCode).toContain("loadRecentRewrites");
@@ -36,7 +36,7 @@ describe("Rewrite History Functionality", () => {
 
   it("should have handleLoadRewrite function in home screen", () => {
     const homeScreenCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/app/(tabs)/index.tsx",
+      process.cwd() + "/app/(tabs)/index.tsx",
       "utf-8"
     );
     expect(homeScreenCode).toContain("handleLoadRewrite");
@@ -44,7 +44,7 @@ describe("Rewrite History Functionality", () => {
 
   it("should have handleDeleteRewrite function in home screen", () => {
     const homeScreenCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/app/(tabs)/index.tsx",
+      process.cwd() + "/app/(tabs)/index.tsx",
       "utf-8"
     );
     expect(homeScreenCode).toContain("handleDeleteRewrite");
@@ -52,7 +52,7 @@ describe("Rewrite History Functionality", () => {
 
   it("should display recent rewrites section in home screen", () => {
     const homeScreenCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/app/(tabs)/index.tsx",
+      process.cwd() + "/app/(tabs)/index.tsx",
       "utf-8"
     );
     expect(homeScreenCode).toContain("REESCRITURAS RECIENTES");
@@ -60,7 +60,7 @@ describe("Rewrite History Functionality", () => {
 
   it("should have rewrite card styles", () => {
     const homeScreenCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/app/(tabs)/index.tsx",
+      process.cwd() + "/app/(tabs)/index.tsx",
       "utf-8"
     );
     expect(homeScreenCode).toContain("rewriteCard");
@@ -71,7 +71,7 @@ describe("Rewrite History Functionality", () => {
 
   it("should have useEffect to load rewrites on mount", () => {
     const homeScreenCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/app/(tabs)/index.tsx",
+      process.cwd() + "/app/(tabs)/index.tsx",
       "utf-8"
     );
     expect(homeScreenCode).toContain("useEffect");
@@ -80,7 +80,7 @@ describe("Rewrite History Functionality", () => {
 
   it("should use AsyncStorage for rewrite persistence", () => {
     const rewriteCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/lib/rewrite.ts",
+      process.cwd() + "/lib/rewrite.ts",
       "utf-8"
     );
     expect(rewriteCode).toContain("AsyncStorage");

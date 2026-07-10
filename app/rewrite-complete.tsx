@@ -31,6 +31,7 @@ export default function RewriteCompleteScreen() {
       }
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
+      console.error("Error al copiar al portapapeles:", error);
       Alert.alert("Error", "No se pudo copiar al portapapeles");
     }
   };
@@ -39,6 +40,9 @@ export default function RewriteCompleteScreen() {
     if (text && !rewriteResult) {
       generateCompleteRewrite();
     }
+    // generateCompleteRewrite/rewriteResult intentionally omitted: this should
+    // only re-run when the source text changes, not on every re-render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text]);
 
   const generateCompleteRewrite = async () => {
@@ -129,6 +133,7 @@ ${rewriteResult.summary}`;
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       }
     } catch (err) {
+      console.error("Error al exportar el texto:", err);
       Alert.alert("Error", "No se pudo exportar el texto");
     }
   };

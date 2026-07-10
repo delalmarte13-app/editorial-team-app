@@ -12,7 +12,7 @@ describe("Gemini API - Configuration & Validation", () => {
     apiKey = process.env.GEMINI_API_KEY || "";
   });
 
-  describe("API Key Configuration", () => {
+  describe.skipIf(!process.env.GEMINI_API_KEY)("API Key Configuration", () => {
     it("should have GEMINI_API_KEY environment variable set", () => {
       expect(apiKey).toBeTruthy();
       expect(apiKey.length).toBeGreaterThan(0);

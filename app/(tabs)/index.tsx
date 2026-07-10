@@ -79,6 +79,7 @@ export default function HomeScreen() {
         Alert.alert("Portapapeles vacío", "No hay texto en el portapapeles.");
       }
     } catch (error) {
+      console.error("Error al acceder al portapapeles:", error);
       Alert.alert("Error", "No se pudo acceder al portapapeles.");
     }
   };

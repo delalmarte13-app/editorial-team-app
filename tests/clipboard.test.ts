@@ -4,7 +4,7 @@ import * as fs from "fs";
 describe("Clipboard Functionality", () => {
   it("should have handlePaste function available", () => {
     const homeScreenCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/app/(tabs)/index.tsx",
+      process.cwd() + "/app/(tabs)/index.tsx",
       "utf-8"
     );
     expect(homeScreenCode).toContain("handlePaste");
@@ -12,7 +12,7 @@ describe("Clipboard Functionality", () => {
 
   it("should have handleCopyToClipboard function in rewrite screen", () => {
     const rewriteCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/app/rewrite-complete.tsx",
+      process.cwd() + "/app/rewrite-complete.tsx",
       "utf-8"
     );
     expect(rewriteCode).toContain("handleCopyToClipboard");
@@ -20,7 +20,7 @@ describe("Clipboard Functionality", () => {
 
   it("should import Clipboard module in home screen", () => {
     const homeScreenCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/app/(tabs)/index.tsx",
+      process.cwd() + "/app/(tabs)/index.tsx",
       "utf-8"
     );
     expect(homeScreenCode).toContain("expo-clipboard");
@@ -28,7 +28,7 @@ describe("Clipboard Functionality", () => {
 
   it("should import Clipboard module in rewrite screen", () => {
     const rewriteCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/app/rewrite-complete.tsx",
+      process.cwd() + "/app/rewrite-complete.tsx",
       "utf-8"
     );
     expect(rewriteCode).toContain("expo-clipboard");
@@ -36,7 +36,7 @@ describe("Clipboard Functionality", () => {
 
   it("should have copy button UI in rewrite screen", () => {
     const rewriteCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/app/rewrite-complete.tsx",
+      process.cwd() + "/app/rewrite-complete.tsx",
       "utf-8"
     );
     expect(rewriteCode).toContain("Copiar Texto");
@@ -44,7 +44,7 @@ describe("Clipboard Functionality", () => {
 
   it("should have paste button UI in home screen", () => {
     const homeScreenCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/app/(tabs)/index.tsx",
+      process.cwd() + "/app/(tabs)/index.tsx",
       "utf-8"
     );
     expect(homeScreenCode).toContain("doc.on.clipboard");
@@ -52,7 +52,7 @@ describe("Clipboard Functionality", () => {
 
   it("should handle clipboard errors gracefully", () => {
     const homeScreenCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/app/(tabs)/index.tsx",
+      process.cwd() + "/app/(tabs)/index.tsx",
       "utf-8"
     );
     expect(homeScreenCode).toContain("Alert.alert");
@@ -61,7 +61,7 @@ describe("Clipboard Functionality", () => {
 
   it("should show success feedback on copy", () => {
     const rewriteCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/app/rewrite-complete.tsx",
+      process.cwd() + "/app/rewrite-complete.tsx",
       "utf-8"
     );
     expect(rewriteCode).toContain("setCopied");
@@ -70,7 +70,7 @@ describe("Clipboard Functionality", () => {
 
   it("should use try-catch in handleCopyToClipboard", () => {
     const rewriteCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/app/rewrite-complete.tsx",
+      process.cwd() + "/app/rewrite-complete.tsx",
       "utf-8"
     );
     const handleCopySection = rewriteCode.substring(
@@ -83,7 +83,7 @@ describe("Clipboard Functionality", () => {
 
   it("should use try-catch in handlePaste", () => {
     const homeScreenCode = fs.readFileSync(
-      "/home/ubuntu/editorial-team-app/app/(tabs)/index.tsx",
+      process.cwd() + "/app/(tabs)/index.tsx",
       "utf-8"
     );
     const handlePasteSection = homeScreenCode.substring(
