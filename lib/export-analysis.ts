@@ -1,6 +1,7 @@
 import * as FileSystem from "expo-file-system/legacy";
 import * as Sharing from "expo-sharing";
 import { Document, Packer, Paragraph, HeadingLevel, AlignmentType } from "docx";
+import { Platform } from "react-native";
 
 export interface ExportData {
   text: string;
@@ -342,20 +343,31 @@ export async function exportAsDocx(data: ExportData): Promise<boolean> {
     });
 
     const blob = await Packer.toBlob(doc);
-    const base64 = await blobToBase64(blob);
-
-    await FileSystem.writeAsStringAsync(filePath, base64, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
-
-    if (await Sharing.isAvailableAsync()) {
-      await Sharing.shareAsync(filePath, {
-        mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        dialogTitle: "Compartir análisis editorial",
+    
+    if (Platform.OS === "web") {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `editorial-analysis-${Date.now()}.docx`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      return true;
+    } else {
+      const base64 = await blobToBase64(blob);
+      await FileSystem.writeAsStringAsync(filePath, base64, {
+        encoding: FileSystem.EncodingType.Base64,
       });
-    }
 
-    return true;
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(filePath, {
+          mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          dialogTitle: "Compartir análisis editorial",
+        });
+      }
+      return true;
+    }
   } catch (error) {
     console.error("Error exporting DOCX:", error);
     return false;
