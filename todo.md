@@ -198,3 +198,15 @@ Estado: Exportación completa implementada. Los usuarios pueden descargar un arc
 - [x] TypeScript sin errores
 
 Estado: Carga de archivos y análisis anti-IA mejorado completados.
+
+
+## Fase 2 (Sesión Actual): Audio TTS para Escuchar Respuestas
+- [x] Agregar botón "Escuchar análisis" en pantalla de especialista
+- [x] Corregir llamada a speakText con objeto SpeechOptions
+- [x] Implementar manejo de errores con .catch()
+- [x] Agregar estilos para botón de audio
+- [x] Todos los tests pasando (126 tests)
+- [x] TypeScript sin errores
+- [x] Servidor funcionando correctamente
+
+Estado: Audio TTS completado. Los usuarios pueden escuchar los análisis en español.

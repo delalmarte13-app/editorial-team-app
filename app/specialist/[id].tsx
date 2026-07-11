@@ -14,6 +14,7 @@ import { useState, useCallback } from "react";
 import * as Haptics from "expo-haptics";
 import * as Clipboard from "expo-clipboard";
 import { MarkdownRenderer } from "@/components/markdown-renderer";
+import { speakText, stopSpeaking } from "@/lib/audio-utils";
 
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
@@ -404,6 +405,19 @@ export default function SpecialistScreen() {
             </View>
             <View style={styles.resultContent}>
               <MarkdownRenderer content={specialistState.result} />
+              <Pressable
+                onPress={() => {
+                  if (specialistState.result) {
+                    speakText({ text: specialistState.result, language: "es-ES" }).catch(
+                      (err) => console.error("TTS error:", err)
+                    );
+                  }
+                }}
+                style={[{ flexDirection: "row", alignItems: "center", justifyContent: "center", marginTop: 16, paddingVertical: 12, paddingHorizontal: 16, backgroundColor: colors.primary, borderRadius: 8 }]}
+              >
+                <IconSymbol name="speaker.wave.2.fill" size={18} color="white" />
+                <Text style={[{ color: "white", marginLeft: 8, fontWeight: "600" }]}>Escuchar análisis</Text>
+              </Pressable>
             </View>
           </View>
         )}
